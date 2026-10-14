@@ -1,0 +1,66 @@
+[
+  {
+    "published": true,
+    "title": "Former des ambassadeurs digitaux pour l'environnement",
+    "slug": "inclusion-numerique",
+    "category": "Inclusion numérique & environnement",
+    "date": "2026-07-18",
+    "date_label": "18 juillet 2026",
+    "location": "Togoudo ASSROSSA",
+    "image": "assets/news/inclusion-numerique.png",
+    "image_alt": "Séance de formation avec des participantes autour d'un ordinateur portable",
+    "summary": "À Togoudo ASSROSSA, un atelier a associé compétences numériques, création de contenus et protection de l'environnement.",
+    "paragraphs": [
+      "Le 18 juillet 2026, Africa Soutiens a organisé à son siège de Togoudo ASSROSSA un atelier consacré à l'inclusion numérique et aux compétences digitales au service de la protection de l'environnement. Trois modules ont abordé la création de contenus numériques et les réseaux sociaux, l'inclusion numérique, puis les enjeux de protection de l'environnement.",
+      "Les participants ont créé des contenus de sensibilisation, notamment à l'aide de Canva et CapCut, présenté des idées de projets verts et constitué un réseau d'ambassadeurs digitaux pour prolonger cette dynamique."
+    ]
+  },
+  {
+    "published": true,
+    "title": "22 jeunes leaders formés à la sauvegarde des enfants",
+    "slug": "jeunes-leaders-lalo",
+    "category": "Jeunesse & protection de l'enfant",
+    "date": "2025-07-17",
+    "date_label": "17 juillet 2025",
+    "location": "Mairie de Lalo",
+    "image": "assets/news/jeunes-leaders-lalo.png",
+    "image_alt": "Jeunes leaders réunis à Lalo derrière la banderole du projet de sauvegarde des enfants",
+    "summary": "Une formation a porté sur la sauvegarde des enfants et les risques liés aux changements climatiques.",
+    "paragraphs": [
+      "Vingt-deux jeunes leaders issus des onze arrondissements de Lalo ont participé à un atelier organisé par Africa Soutiens à la mairie de Lalo. La formation portait sur les liens entre changement climatique et protection de l'enfant.",
+      "Les échanges ont permis d'identifier les risques accrus pour les enfants en contexte climatique et de travailler sur des stratégies de protection ainsi que des plans communautaires adaptés."
+    ]
+  },
+  {
+    "published": true,
+    "title": "Lancement d'un projet d'autonomisation des femmes rurales",
+    "slug": "projet-femmes-ze",
+    "category": "Femmes & agriculture durable",
+    "date": "2024-12-26",
+    "date_label": "26 décembre 2024",
+    "location": "Commune de Zè",
+    "image": "assets/news/projet-femmes-ze.png",
+    "image_alt": "Participants au lancement du Youth Challenge Fund Phase 2 à Zè",
+    "summary": "Africa Soutiens, Climate Women et Plan International lancent une initiative d'agriculture résiliente au climat avec les femmes rurales.",
+    "paragraphs": [
+      "Climate Women et Africa Soutiens, en partenariat avec Plan International, ont lancé le 26 décembre 2024 la deuxième phase d'un projet destiné aux femmes rurales de Zè. L'initiative vise à soutenir des activités agricoles durables, résilientes au climat et génératrices de revenus.",
+      "Le rapport présente cette phase comme un projet lancé et axé sur le renforcement des compétences et l'accompagnement des femmes. Il ne donne pas ici de résultat chiffré à attribuer à cette phase."
+    ]
+  },
+  {
+    "published": true,
+    "title": "Sensibiliser les élèves aux bonnes pratiques d'hygiène",
+    "slug": "hygiene-scolaire-save",
+    "category": "Hygiène scolaire & santé",
+    "date": "2023-10-16",
+    "date_label": "16 et 31 octobre 2023",
+    "location": "Commune de Savè",
+    "image": "assets/news/hygiene-scolaire-save.png",
+    "image_alt": "Enfants et adultes participent à une activité collective de nettoyage",
+    "summary": "Plus de 40 élèves de trois écoles de Savè ont été sensibilisés aux bonnes pratiques d'hygiène.",
+    "paragraphs": [
+      "Africa Soutiens a mené des séances d'éducation à l'hygiène dans trois écoles de la commune de Savè : EPP Trésor Caché de Gobé, EPP Gbé et EPP Oké-Owo. Le rapport indique que plus de 40 élèves, filles et garçons âgés de 5 à 11 ans, ont été sensibilisés.",
+      "Les séances ont abordé l'hygiène personnelle, la propreté des espaces scolaires et la gestion des déchets. Une équipe de veille composée de représentants des classes a également été constituée pour contribuer au maintien de la propreté."
+    ]
+  }
+]

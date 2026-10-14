@@ -1,0 +1,75 @@
+media:
+  - name: images
+    label: Photos des actualités
+    input: assets/news
+    output: assets/news
+    extensions:
+      - jpg
+      - jpeg
+      - png
+      - webp
+
+content:
+  - name: actualites
+    label: Actualités
+    type: file
+    path: data/actualites.json
+    format: json
+    list: true
+    fields:
+      - name: published
+        label: Publier cette actualité
+        type: boolean
+        default: false
+      - name: title
+        label: Titre
+        type: string
+        required: true
+      - name: slug
+        label: Identifiant du lien
+        type: string
+        required: true
+        pattern:
+          regex: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          message: "Utilisez uniquement des lettres minuscules, des chiffres et des tirets."
+      - name: category
+        label: Thème
+        type: string
+        required: true
+      - name: date
+        label: Date de l'activité
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+      - name: date_label
+        label: Date affichée (facultatif)
+        type: string
+      - name: location
+        label: Lieu
+        type: string
+      - name: image
+        label: Photo
+        type: image
+        required: true
+        options:
+          media: images
+          path: assets/news
+          extensions:
+            - jpg
+            - jpeg
+            - png
+            - webp
+      - name: image_alt
+        label: Description de la photo
+        type: string
+        required: true
+      - name: summary
+        label: Résumé pour la page d'accueil
+        type: text
+        required: true
+      - name: paragraphs
+        label: Paragraphes de l'article
+        type: text
+        required: true
+        list: true
