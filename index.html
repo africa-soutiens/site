@@ -14,7 +14,7 @@
       href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css?v=8" />
+    <link rel="stylesheet" href="styles.css?v=10" />
   </head>
   <body>
     <header class="site-header">
@@ -29,12 +29,12 @@
         </button>
 
         <nav class="main-nav" aria-label="Navigation principale">
-          <a href="index.html" class="active">Accueil</a>
-          <a href="about.html">À propos</a>
-          <a href="actions.html">Nos actions</a>
-          <a href="projects.html">Projets</a>
-          <a href="actualites.html">Actualités</a>
-          <a href="contact.html">Contact</a>
+          <a href="index.html">Accueil</a>
+          <a href="index.html#about">À propos</a>
+          <a href="index.html#actions">Nos actions</a>
+          <a href="index.html#projects">Projets</a>
+          <a href="index.html#actualites">Actualités</a>
+          <a href="index.html#contact">Contact</a>
         </nav>
 
         <a href="contact.html#don" class="btn btn-primary header-cta">Faire un don</a>
@@ -52,19 +52,14 @@
               institutions pour construire un avenir plus inclusif, résilient et durable.
             </p>
             <div class="hero-actions">
-              <a href="projects.html" class="btn btn-primary">Découvrir nos projets</a>
+              <a href="index.html#projects" class="btn btn-primary">Découvrir nos projets</a>
               <a href="contact.html" class="btn btn-secondary">Nous rejoindre</a>
             </div>
-            <ul class="hero-meta">
-              <li>+8 communes d'intervention</li>
-              <li>+200 personnes mobilisées</li>
-              <li>+150 femmes rurales accompagnées</li>
-            </ul>
           </div>
 
           <div class="hero-panel">
             <div class="panel-card">
-              <div class="panel-badge">Impact mobilisateur</div>
+              <div class="panel-badge">Nos chiffres clés</div>
               <h2>Un modèle de développement local, inclusif et durable</h2>
               <p>
                 Nous combinons sensibilisation, plaidoyer, renforcement de capacités et accompagnement
@@ -72,48 +67,19 @@
               </p>
               <div class="mini-stats">
                 <div>
-                  <strong data-count="15">0</strong>
-                  <span>initiatives</span>
+                  <strong data-count="8">0</strong>
+                  <span>COMMUNES D'INTERVENTION</span>
                 </div>
                 <div>
-                  <strong data-count="200">0</strong>
-                  <span>jeunes formés</span>
+                  <strong data-count="2000">0</strong>
+                  <span>BÉNÉFICIAIRES IMPACTÉS</span>
                 </div>
                 <div>
-                  <strong data-count="10">0</strong>
-                  <span>partenaires</span>
+                  <strong data-count="30">0</strong>
+                  <span>INITIATIVES</span>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="stats-strip">
-        <div class="container stats-grid">
-          <div class="stat-item">
-            <span class="stat-number" data-count="8">0</span>
-            <span class="stat-label">communes d'intervention</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-number" data-count="15">0</span>
-            <span class="stat-label">initiatives</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-number" data-count="200">0</span>
-            <span class="stat-label">personnes mobilisées</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-number" data-count="200">0</span>
-            <span class="stat-label">jeunes leaders formés</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-number" data-count="150">0</span>
-            <span class="stat-label">femmes accompagnées</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-number" data-count="10">0</span>
-            <span class="stat-label">partenaires</span>
           </div>
         </div>
       </section>
@@ -503,25 +469,31 @@
             <div class="form-row">
               <label>
                 Nom
-                <input type="text" name="name" placeholder="Votre nom" autocomplete="name" required />
+                <input type="text" name="name" placeholder="Votre nom" autocomplete="name" minlength="2" maxlength="120" required />
               </label>
               <label>
                 E-mail
-                <input type="email" name="email" placeholder="Votre e-mail" autocomplete="email" required />
+                <input type="email" name="email" placeholder="Votre e-mail" autocomplete="email" maxlength="254" required />
               </label>
             </div>
 
             <label>
               Sujet
-              <input type="text" name="subject" placeholder="Objet de votre message" required />
+              <input type="text" name="subject" placeholder="Objet de votre message" minlength="3" maxlength="180" required />
             </label>
 
             <label>
               Message
-              <textarea name="message" rows="5" placeholder="Décrivez votre demande..." required></textarea>
+              <textarea name="message" rows="5" placeholder="Décrivez votre demande..." minlength="10" maxlength="5000" required></textarea>
             </label>
 
-            <button type="submit" class="btn btn-primary">Envoyer par e-mail</button>
+            <label class="contact-honeypot" aria-hidden="true">
+              Ne pas remplir
+              <input type="text" name="company" tabindex="-1" autocomplete="off" />
+            </label>
+            <input type="hidden" name="started_at" />
+
+            <button type="submit" class="btn btn-primary">Envoyer le message</button>
             <p class="contact-form-note" data-form-status role="status">
               Le formulaire ouvrira votre application de messagerie pour préparer l'envoi.
             </p>
@@ -545,11 +517,11 @@
           <p>E-mail : africasoutiens@gmail.com</p>
         </div>
         <nav class="footer-links" aria-label="Liens utiles">
-          <a href="about.html">À propos</a>
-          <a href="actions.html">Nos actions</a>
-          <a href="projects.html">Projets</a>
-          <a href="actualites.html">Actualités</a>
-          <a href="contact.html">Contact</a>
+          <a href="index.html#about">À propos</a>
+          <a href="index.html#actions">Nos actions</a>
+          <a href="index.html#projects">Projets</a>
+          <a href="index.html#actualites">Actualités</a>
+          <a href="index.html#contact">Contact</a>
         </nav>
       </div>
       <div class="container footer-bottom">
@@ -557,6 +529,7 @@
       </div>
     </footer>
 
-    <script src="script.js?v=3"></script>
+    <script src="supabase-config.js?v=1"></script>
+    <script src="script.js?v=5"></script>
   </body>
 </html>

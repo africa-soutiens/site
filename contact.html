@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=8" />
+    <link rel="stylesheet" href="styles.css?v=10" />
   </head>
   <body>
     <header class="site-header">
@@ -20,11 +20,11 @@
         <button class="nav-toggle" aria-label="Ouvrir le menu" aria-expanded="false"><span></span><span></span><span></span></button>
         <nav class="main-nav" aria-label="Navigation principale">
           <a href="index.html">Accueil</a>
-          <a href="about.html">À propos</a>
-          <a href="actions.html">Nos actions</a>
-          <a href="projects.html">Projets</a>
-          <a href="actualites.html">Actualités</a>
-          <a href="contact.html" class="active">Contact</a>
+          <a href="index.html#about">À propos</a>
+          <a href="index.html#actions">Nos actions</a>
+          <a href="index.html#projects">Projets</a>
+          <a href="index.html#actualites">Actualités</a>
+          <a href="index.html#contact">Contact</a>
         </nav>
         <a href="#don" class="btn btn-primary header-cta">Faire un don</a>
       </div>
@@ -90,25 +90,31 @@
             <div class="form-row">
               <label>
                 Nom
-                <input type="text" name="name" placeholder="Votre nom" autocomplete="name" required />
+                <input type="text" name="name" placeholder="Votre nom" autocomplete="name" minlength="2" maxlength="120" required />
               </label>
               <label>
                 E-mail
-                <input type="email" name="email" placeholder="Votre e-mail" autocomplete="email" required />
+                <input type="email" name="email" placeholder="Votre e-mail" autocomplete="email" maxlength="254" required />
               </label>
             </div>
 
             <label>
               Sujet
-              <input type="text" name="subject" placeholder="Objet de votre message" required />
+              <input type="text" name="subject" placeholder="Objet de votre message" minlength="3" maxlength="180" required />
             </label>
 
             <label>
               Message
-              <textarea name="message" rows="5" placeholder="Décrivez votre demande..." required></textarea>
+              <textarea name="message" rows="5" placeholder="Décrivez votre demande..." minlength="10" maxlength="5000" required></textarea>
             </label>
 
-            <button type="submit" class="btn btn-primary">Envoyer par e-mail</button>
+            <label class="contact-honeypot" aria-hidden="true">
+              Ne pas remplir
+              <input type="text" name="company" tabindex="-1" autocomplete="off" />
+            </label>
+            <input type="hidden" name="started_at" />
+
+            <button type="submit" class="btn btn-primary">Envoyer le message</button>
             <p class="contact-form-note" data-form-status role="status">
               Le formulaire ouvrira votre application de messagerie pour préparer l'envoi.
             </p>
@@ -132,11 +138,11 @@
           <p>E-mail : africasoutiens@gmail.com</p>
         </div>
         <nav class="footer-links" aria-label="Liens utiles">
-          <a href="about.html">À propos</a>
-          <a href="actions.html">Nos actions</a>
-          <a href="projects.html">Projets</a>
-          <a href="actualites.html">Actualités</a>
-          <a href="contact.html">Contact</a>
+          <a href="index.html#about">À propos</a>
+          <a href="index.html#actions">Nos actions</a>
+          <a href="index.html#projects">Projets</a>
+          <a href="index.html#actualites">Actualités</a>
+          <a href="index.html#contact">Contact</a>
         </nav>
       </div>
       <div class="container footer-bottom">
@@ -144,6 +150,7 @@
       </div>
     </footer>
 
-    <script src="script.js?v=3"></script>
+    <script src="supabase-config.js?v=1"></script>
+    <script src="script.js?v=5"></script>
   </body>
 </html>

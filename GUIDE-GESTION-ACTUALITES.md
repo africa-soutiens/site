@@ -1,33 +1,28 @@
 # Gérer les actualités du site
 
-Le site est préparé pour être hébergé sur GitHub Pages et édité avec [Pages CMS](https://pagescms.org/). Les actualités et les photos sont conservées dans le dépôt GitHub ; chaque modification enregistrée dans Pages CMS crée un changement dans ce dépôt, puis GitHub Pages republie le site.
+Le site utilise le projet Supabase Africa Soutiens pour afficher les actualités publiées et enregistrer les messages de contact. Le fichier `data/actualites.json` reste disponible comme solution de repli si la configuration Supabase est retirée.
 
-## Mise en service (à faire une seule fois)
+## Connecter Supabase (à faire une seule fois)
 
-1. Créer un dépôt GitHub pour le site et y publier tous les fichiers du projet, y compris le fichier caché `.pages.yml` et le dossier `data`.
-2. Pour utiliser GitHub Pages gratuitement, choisir un dépôt public. Dans **Settings → Pages**, activer la publication depuis la branche principale et le dossier racine (`/(root)`).
-3. Ouvrir [Pages CMS](https://pagescms.org/), se connecter avec GitHub et autoriser l’accès à ce dépôt. Chaque personne qui publiera doit avoir un accès en écriture au dépôt ; n’utilisez pas de jeton personnel partagé.
-4. Dans Pages CMS, choisir le dépôt **Africa Soutiens → Actualités**. Vérifier que la rubrique liste les quatre actualités déjà présentes.
+Le projet `pidcbnwaifewdvigouzb` est déjà configuré : le schéma SQL et les quatre actualités initiales sont importés, et la fonction `submit-contact` est déployée. Le fichier `supabase-config.js` contient l’URL du projet et sa clé **publishable** publique. Cette clé peut être utilisée dans le navigateur avec les règles RLS ; ne jamais y mettre de clé `sb_secret_...` ou `service_role`.
 
-Le fichier `.pages.yml` configure la rubrique d’actualités et l’envoi des nouvelles photos vers `assets/news`. Pages CMS est une interface d’édition : le site public reste hébergé par GitHub Pages.
+La fonction de contact est accessible sans connexion visiteur, mais n'accepte que les origines indiquées dans **Edge Functions → Secrets → ALLOWED_ORIGINS**. Les origines `http://localhost:8000` et `https://africa-soutiens.github.io` sont autorisées. Si le domaine public change, mettre à jour cette liste avec l’origine exacte. Les clés serveur sont fournies au runtime Supabase et ne doivent pas être copiées dans le site.
 
-## Publier une actualité
+## Publier une actualité dans Supabase
 
-1. Dans Pages CMS, ouvrir **Actualités** puis créer une entrée.
-2. Renseigner le titre, un identifiant court en minuscules séparées par des tirets (par exemple `atelier-a-save`), le thème, la date, le lieu et le résumé.
-3. Choisir une photo et saisir un texte alternatif qui décrit réellement l’image.
-4. Ajouter un paragraphe par élément dans **Paragraphes de l’article**.
-5. Activer **Publier cette actualité**, puis enregistrer les changements.
+1. Dans **Table Editor → news_articles**, créer une ligne et remplir les champs. `slug` doit être unique, en minuscules et séparé par des tirets.
+2. Pour une nouvelle photo, l’envoyer dans **Storage → news-images**, puis copier son URL publique dans `image`. Les quatre articles importés utilisent déjà les images livrées avec le site.
+3. Renseigner `paragraphs` sous forme de tableau JSON, par exemple `["Premier paragraphe.", "Deuxième paragraphe."]`.
+4. Mettre `published` à `true` pour publier. Les visiteurs ne peuvent lire que les articles publiés ; les modifications se font depuis le tableau de bord Supabase.
 
-Une actualité non publiée est conservée dans le dépôt, mais n’apparaît pas sur le site. La page d’accueil affiche automatiquement les trois actualités publiées les plus récentes ; la page **Actualités** les affiche toutes, par date décroissante.
+La page d’accueil affiche les trois articles publiés les plus récents. La page **Actualités** les affiche tous, par date décroissante.
 
-## Retirer ou corriger une actualité
+## Messages de contact
 
-Pour retirer temporairement un article sans le supprimer, désactiver **Publier cette actualité** et enregistrer. Pour corriger un contenu ou une photo, modifier l’entrée correspondante. Les changements publiés sont suivis dans l’historique du dépôt GitHub.
+Les formulaires envoient les messages à la fonction `submit-contact`. Elle valide les champs, applique une limite d’envoi par adresse IP hachée et enregistre les messages dans `contact_messages`. Seule la fonction utilise la clé `service_role` ; aucune lecture publique des messages n’est autorisée. Consultez et supprimez les messages depuis le tableau de bord Supabase.
 
-## À savoir avant la mise en ligne
+Si `supabase-config.js` est vide, les actualités restent chargées depuis `data/actualites.json` et le formulaire prépare un e-mail comme avant.
 
-- Le dépôt GitHub doit être relié à GitHub Pages avant que les modifications du CMS soient visibles sur le site.
-- L’adresse gratuite de publication est généralement de la forme `https://organisation.github.io/nom-du-depot/`. Un domaine personnalisé s’achète séparément.
-- Les personnes qui publient ont un droit d’écriture sur le dépôt : ne partagez pas un compte GitHub commun.
-- Le formulaire de contact actuel prépare toujours un e-mail dans la messagerie du visiteur ; il ne stocke pas les messages dans GitHub.
+## Ancien flux Pages CMS
+
+`.pages.yml` est conservé pour référence, mais Pages CMS n’alimente pas la base Supabase. Une fois Supabase configuré, publier les nouvelles actualités depuis le tableau de bord Supabase.

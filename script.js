@@ -2,6 +2,78 @@ const navToggle = document.querySelector('.nav-toggle');
 const nav = document.querySelector('.main-nav');
 const year = document.getElementById('year');
 
+if (nav) {
+  const navLinks = nav.querySelectorAll('a');
+  const normalizePath = (pathname) => (pathname.endsWith('/') ? `${pathname}index.html` : pathname);
+  const homePath = normalizePath(new URL('index.html', window.location.href).pathname);
+  const pageSections = new Map([
+    ['about.html', 'about'],
+    ['actions.html', 'actions'],
+    ['projects.html', 'projects'],
+    ['actualites.html', 'actualites'],
+    ['contact.html', 'contact'],
+  ]);
+  const setActiveNavLink = (activeLink) => {
+    navLinks.forEach((link) => {
+      const isActive = link === activeLink;
+
+      link.classList.toggle('active', isActive);
+      if (isActive) {
+        link.setAttribute('aria-current', 'location');
+      } else {
+        link.removeAttribute('aria-current');
+      }
+    });
+  };
+  const updateActiveNavLink = (destination = window.location.href) => {
+    const currentUrl = new URL(destination, window.location.href);
+
+    if (normalizePath(currentUrl.pathname) === homePath) {
+      const headerHeight = document.querySelector('.site-header')?.getBoundingClientRect().height ?? 0;
+      const marker = window.scrollY + headerHeight + 36;
+      const activeSectionLink = [...navLinks].reduce((activeLink, link) => {
+        const linkUrl = new URL(link.href);
+        const section =
+          normalizePath(linkUrl.pathname) === homePath &&
+          linkUrl.hash &&
+          document.querySelector(linkUrl.hash);
+
+        if (section && section.getBoundingClientRect().top + window.scrollY <= marker) {
+          return link;
+        }
+        return activeLink;
+      }, undefined);
+      const activeLink = activeSectionLink ?? [...navLinks].find((link) => {
+        const linkUrl = new URL(link.href);
+        return normalizePath(linkUrl.pathname) === homePath && !linkUrl.hash;
+      });
+
+      setActiveNavLink(activeLink);
+      return;
+    }
+
+    const page = currentUrl.pathname.split('/').pop() ?? '';
+    const section = pageSections.get(page);
+    const activeLink = [...navLinks].find((link) => {
+      const linkUrl = new URL(link.href);
+      return (
+        normalizePath(linkUrl.pathname) === homePath &&
+        linkUrl.hash === (section ? `#${section}` : '')
+      );
+    });
+
+    setActiveNavLink(activeLink);
+  };
+
+  const scheduleActiveNavLinkUpdate = () => requestAnimationFrame(() => updateActiveNavLink());
+  updateActiveNavLink();
+  window.addEventListener('hashchange', scheduleActiveNavLinkUpdate);
+  window.addEventListener('scroll', scheduleActiveNavLinkUpdate, { passive: true });
+  navLinks.forEach((link) => {
+    link.addEventListener('click', () => updateActiveNavLink(link.href));
+  });
+}
+
 if (year) {
   year.textContent = new Date().getFullYear();
 }
@@ -111,6 +183,32 @@ if (featuredNews || newsList) {
     Array.isArray(article.paragraphs) &&
     article.paragraphs.every((paragraph) => typeof paragraph === 'string');
 
+  const supabase = window.AFRICA_SOUTIENS_SUPABASE;
+  const hasSupabaseConfig = Boolean(supabase?.url && supabase?.publishableKey);
+  const hasPartialSupabaseConfig = Boolean(supabase?.url || supabase?.publishableKey) && !hasSupabaseConfig;
+  const loadArticles = async () => {
+    if (hasPartialSupabaseConfig) {
+      throw new Error('La configuration Supabase est incomplète.');
+    }
+
+    const url = hasSupabaseConfig
+      ? `${supabase.url.replace(/\/$/, '')}/rest/v1/news_articles?select=*&published=eq.true&order=date.desc`
+      : 'data/actualites.json';
+    const response = await fetch(url, {
+      headers: hasSupabaseConfig
+        ? {
+            apikey: supabase.publishableKey,
+          }
+        : undefined,
+    });
+
+    if (!response.ok) {
+      throw new Error(`Chargement des actualités impossible (${response.status}).`);
+    }
+
+    return response.json();
+  };
+
   const renderFeaturedArticle = (article) => {
     const card = makeElement('article', 'news-card');
     card.append(createImage(article));
@@ -150,16 +248,10 @@ if (featuredNews || newsList) {
     return story;
   };
 
-  fetch('data/actualites.json')
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`Chargement des actualités impossible (${response.status}).`);
-      }
-      return response.json();
-    })
+  loadArticles()
     .then((articles) => {
       if (!Array.isArray(articles) || !articles.every(isValidArticle)) {
-        throw new Error('Le fichier des actualités contient des données invalides.');
+        throw new Error('Les actualités reçues contiennent des données invalides.');
       }
 
       const published = articles
@@ -192,11 +284,33 @@ if (featuredNews || newsList) {
 }
 
 document.querySelectorAll('.contact-form').forEach((contactForm) => {
+  const startedAt = contactForm.querySelector('[name="started_at"]');
+  const formStatus = contactForm.querySelector('[data-form-status]');
+  const supabase = window.AFRICA_SOUTIENS_SUPABASE;
+  const hasSupabaseConfig = Boolean(supabase?.url && supabase?.publishableKey);
+  const hasPartialSupabaseConfig = Boolean(supabase?.url || supabase?.publishableKey) && !hasSupabaseConfig;
+
+  if (startedAt) {
+    startedAt.value = String(Date.now());
+  }
+
+  if (formStatus) {
+    if (hasSupabaseConfig) {
+      formStatus.textContent = 'Votre message sera envoyé en ligne de manière sécurisée.';
+    } else if (hasPartialSupabaseConfig) {
+      formStatus.textContent = 'La configuration Supabase est incomplète. Le formulaire ne peut pas être envoyé.';
+    } else {
+      formStatus.textContent =
+        "L'envoi en ligne n'est pas encore configuré. Le formulaire préparera un e-mail.";
+    }
+  }
+
   contactForm.addEventListener('submit', (event) => {
     event.preventDefault();
     if (!contactForm.reportValidity()) return;
 
     const fields = new FormData(contactForm);
+    const status = contactForm.querySelector('[data-form-status]');
     const subject = `Contact depuis le site - ${fields.get('subject')}`;
     const body = [
       `Nom : ${fields.get('name')}`,
@@ -204,13 +318,59 @@ document.querySelectorAll('.contact-form').forEach((contactForm) => {
       '',
       fields.get('message'),
     ].join('\n');
-    const status = contactForm.querySelector('[data-form-status]');
 
-    if (status) {
-      status.textContent =
-        "Votre messagerie va s'ouvrir avec le message préparé. Si elle ne s'ouvre pas, écrivez à africasoutiens@gmail.com.";
+    if (hasPartialSupabaseConfig) {
+      if (status) status.textContent = 'La configuration Supabase est incomplète. Le message n’a pas été envoyé.';
+      return;
     }
 
-    window.location.href = `mailto:africasoutiens@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    if (!hasSupabaseConfig) {
+      if (status) {
+        status.textContent =
+          "L'envoi en ligne n'est pas encore configuré. Votre messagerie va s'ouvrir pour préparer l'e-mail.";
+      }
+
+      window.location.href = `mailto:africasoutiens@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      return;
+    }
+
+    const submitButton = contactForm.querySelector('[type="submit"]');
+    if (submitButton) submitButton.disabled = true;
+    if (status) status.textContent = 'Envoi de votre message…';
+
+    fetch(`${supabase.url.replace(/\/$/, '')}/functions/v1/submit-contact`, {
+      method: 'POST',
+      headers: {
+        apikey: supabase.publishableKey,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: fields.get('name'),
+        email: fields.get('email'),
+        subject: fields.get('subject'),
+        message: fields.get('message'),
+        company: fields.get('company'),
+        startedAt: fields.get('started_at'),
+      }),
+    })
+      .then(async (response) => {
+        if (!response.ok) {
+          const result = await response.json().catch(() => ({}));
+          throw new Error(result.error || `Envoi impossible (${response.status}).`);
+        }
+
+        contactForm.reset();
+        if (startedAt) startedAt.value = String(Date.now());
+        if (status) status.textContent = 'Merci, votre message a bien été envoyé.';
+      })
+      .catch((error) => {
+        if (status) {
+          status.textContent = `${error.message} Veuillez réessayer ou écrire à africasoutiens@gmail.com.`;
+        }
+        console.error(error);
+      })
+      .finally(() => {
+        if (submitButton) submitButton.disabled = false;
+      });
   });
 });
