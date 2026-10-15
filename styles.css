@@ -379,14 +379,6 @@ textarea {
   padding-bottom: 70px;
 }
 
-.contact-honeypot {
-  position: absolute;
-  left: -10000px;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-}
-
 .hero-copy {
   color: var(--white);
   max-width: 620px;

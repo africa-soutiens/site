@@ -79,7 +79,11 @@ Deno.serve(async (request) => {
   const startedAt = Number(payload.startedAt);
 
   if (company) {
-    return jsonResponse({ success: true }, 200, origin);
+    return jsonResponse(
+      { error: 'Le formulaire a été bloqué par la vérification anti-spam. Actualisez la page et réessayez.' },
+      400,
+      origin
+    );
   }
 
   if (
