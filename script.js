@@ -349,7 +349,7 @@ document.querySelectorAll('.contact-form').forEach((contactForm) => {
         email: fields.get('email'),
         subject: fields.get('subject'),
         message: fields.get('message'),
-        company: fields.get('company'),
+        company: fields.get('website_confirm'),
         startedAt: fields.get('started_at'),
       }),
     })
