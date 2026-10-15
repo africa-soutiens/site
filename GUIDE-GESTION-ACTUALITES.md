@@ -8,6 +8,8 @@ Le projet `pidcbnwaifewdvigouzb` est déjà configuré : le schéma SQL et les q
 
 La fonction de contact est accessible sans connexion visiteur, mais n'accepte que les origines indiquées dans **Edge Functions → Secrets → ALLOWED_ORIGINS**. Les origines `http://localhost:8000` et `https://africa-soutiens.github.io` sont autorisées. Si le domaine public change, mettre à jour cette liste avec l’origine exacte. Les clés serveur sont fournies au runtime Supabase et ne doivent pas être copiées dans le site.
 
+Pour recevoir une notification par e-mail lors d'un nouveau message, créer un compte Resend avec l'adresse de réception `africasoutiens@gmail.com`, vérifier cette adresse, créer une clé API, puis configurer le secret `RESEND_API_KEY` dans **Edge Functions → Secrets**. Par défaut, les notifications sont envoyées à `africasoutiens@gmail.com` depuis l'adresse de test Resend `onboarding@resend.dev`; ce domaine de test ne permet l'envoi qu'à l'adresse vérifiée du propriétaire du compte et convient aux essais uniquement. Pour envoyer à d'autres adresses ou depuis une adresse Africa Soutiens, il faudra vérifier un domaine d'envoi dans Resend et configurer les secrets `CONTACT_NOTIFICATION_FROM` (par exemple `Africa Soutiens <contact@votre-domaine.org>`) et `CONTACT_NOTIFICATION_TO`. L'absence ou l'échec de la notification n'empêche pas l'enregistrement du message dans Supabase ; le formulaire indique alors que l'e-mail n'a pas été envoyé.
+
 ## Publier une actualité dans Supabase
 
 1. Dans **Table Editor → news_articles**, créer une ligne et remplir les champs. `slug` doit être unique, en minuscules et séparé par des tirets.

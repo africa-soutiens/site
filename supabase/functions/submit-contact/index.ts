@@ -173,5 +173,47 @@ Deno.serve(async (request) => {
     return jsonResponse({ error: 'Votre message n’a pas pu être enregistré. Veuillez réessayer.' }, 503, origin);
   }
 
-  return jsonResponse({ success: true }, 201, origin);
+  const resendApiKey = Deno.env.get('RESEND_API_KEY');
+  if (!resendApiKey) {
+    console.error('Missing RESEND_API_KEY; the contact message was saved without an email notification.');
+    return jsonResponse({ success: true, notificationSent: false }, 201, origin);
+  }
+
+  const notificationFrom =
+    Deno.env.get('CONTACT_NOTIFICATION_FROM') ?? 'Africa Soutiens <onboarding@resend.dev>';
+  const notificationTo = Deno.env.get('CONTACT_NOTIFICATION_TO') ?? 'africasoutiens@gmail.com';
+  let notificationResponse: Response;
+  try {
+    notificationResponse = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${resendApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      signal: AbortSignal.timeout(10000),
+      body: JSON.stringify({
+        from: notificationFrom,
+        to: [notificationTo],
+        reply_to: email,
+        subject: `Nouveau message du site : ${subject}`,
+        text: [
+          `Nom : ${name}`,
+          `E-mail : ${email}`,
+          `Sujet : ${subject}`,
+          '',
+          message,
+        ].join('\n'),
+      }),
+    });
+  } catch (error) {
+    console.error('Contact notification request failed after saving the message:', error);
+    return jsonResponse({ success: true, notificationSent: false }, 201, origin);
+  }
+
+  if (!notificationResponse.ok) {
+    console.error('Contact notification provider rejected the email:', notificationResponse.status);
+    return jsonResponse({ success: true, notificationSent: false }, 201, origin);
+  }
+
+  return jsonResponse({ success: true, notificationSent: true }, 201, origin);
 });

@@ -358,9 +358,14 @@ document.querySelectorAll('.contact-form').forEach((contactForm) => {
           throw new Error(result.error || `Envoi impossible (${response.status}).`);
         }
 
+        const result = await response.json();
         contactForm.reset();
         if (startedAt) startedAt.value = String(Date.now());
-        if (status) status.textContent = 'Merci, votre message a bien été envoyé.';
+        if (status) {
+          status.textContent = result.notificationSent === false
+            ? 'Votre message est enregistré, mais la notification par e-mail n’a pas pu être envoyée.'
+            : 'Merci, votre message a bien été envoyé.';
+        }
       })
       .catch((error) => {
         if (status) {
